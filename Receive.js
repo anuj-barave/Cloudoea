@@ -1,42 +1,34 @@
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
-// Set the region
+// Set the region 
 AWS.config.update({region: 'REGION'});
 
 // Create an SQS service object
 var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
-var queueURL = "https://sqs.ap-south-1.amazonaws.com/000263543451/TestQueue";
-
 var params = {
- AttributeNames: [
-    "SentTimestamp"
- ],
- MaxNumberOfMessages: 10,
- MessageAttributeNames: [
-    "All"
- ],
- QueueUrl: queueURL,
- VisibilityTimeout: 20,
- WaitTimeSeconds: 0
+   // Remove DelaySeconds parameter and value for FIFO queues
+  DelaySeconds: 10,
+  MessageAttributes: {
+    "ID": {
+      DataType: "Number",
+      StringValue: "67"
+    },
+    "Name": {
+      DataType: "String",
+      StringValue: "prasad barave"
+    }
+  },
+  MessageBody: "Test Message",
+  // MessageDeduplicationId: "TheWhistler",  // Required for FIFO queues
+  // MessageGroupId: "Group1",  // Required for FIFO queues
+  QueueUrl: "https://sqs.ap-south-1.amazonaws.com/000263543451/TestQueue"
 };
 
-sqs.receiveMessage(params, function(err, data) {
+sqs.sendMessage(params, function(err, data) {
   if (err) {
-    console.log("Receive Error", err);
-  } else if (data.Messages) {
-    console.log("Success :", data.Messages[0].MessageAttributes.Title.StringValue);
-    var deleteParams = {
-      QueueUrl: queueURL,
-      ReceiptHandle: data.Messages[0].ReceiptHandle
-    };
-    sqs.deleteMessage(deleteParams, function(err, data) {
-      if (err) {
-        console.log("Delete Error", err);
-      } else {
-        console.log("Message Deleted", data);
-      }
-    });
+    console.log("Error", err);
+  } else {
+    console.log("Success", data.MessageId);
   }
-
 });
