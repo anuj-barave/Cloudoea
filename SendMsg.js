@@ -10,20 +10,16 @@ var params = {
    // Remove DelaySeconds parameter and value for FIFO queues
   DelaySeconds: 10,
   MessageAttributes: {
-    "Title": {
-      DataType: "String",
-      StringValue: "Pradyumna"
-    },
-    "Author": {
-      DataType: "String",
-      StringValue: "John Grisham"
-    },
-    "WeeksOn": {
+    "ID": {
       DataType: "Number",
-      StringValue: "6"
+      StringValue: "67"
+    },
+    "Name": {
+      DataType: "String",
+      StringValue: "prasad barave"
     }
   },
-  MessageBody: "Information about current NY Times fiction bestseller for week of 12/11/2016.",
+  MessageBody: "Test Message",
   // MessageDeduplicationId: "TheWhistler",  // Required for FIFO queues
   // MessageGroupId: "Group1",  // Required for FIFO queues
   QueueUrl: "https://sqs.ap-south-1.amazonaws.com/000263543451/TestQueue"
